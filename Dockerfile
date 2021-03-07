@@ -1,4 +1,4 @@
-FROM scratch
+FROM sapcc/mosquitto-exporter
 LABEL source_repository="https://github.com/sapcc/mosquitto-exporter"
 
 COPY bin/mosquitto_exporter /mosquitto_exporter
