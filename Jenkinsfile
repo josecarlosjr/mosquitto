@@ -78,8 +78,8 @@ pipeline {
     stage('Deploy App') {
       steps {
         script {
-          kubernetesDeploy(configs: "hellowhale.yml", kubeconfigId: "config", deleteResource: true)
-          kubernetesDeploy(configs: "hellowhale.yml", kubeconfigId: "config")
+          kubernetesDeploy(configs: "mosquitto.yml", kubeconfigId: "config", deleteResource: true)
+          kubernetesDeploy(configs: "mosquitto.yml", kubeconfigId: "config")
         }
       }
     }
