@@ -1,4 +1,6 @@
-FROM sapcc/mosquitto-exporter
+FROM sapcc/mosquitto-exporter:0.6.0
+
+
 LABEL source_repository="https://github.com/sapcc/mosquitto-exporter"
 
 COPY bin/mosquitto_exporter /mosquitto_exporter
