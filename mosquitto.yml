@@ -1,0 +1,105 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mosquitto
+spec:  
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mosquitto
+  template:
+    metadata:
+      name: mosquitto
+      labels:
+        app: mosquitto  
+    spec:
+      #affinity:
+      #  nodeAffinity:
+      #    requiredDuringSchedulingIgnoredDuringExecution:
+      #      nodeSelectorTerms:
+      #      - matchExpressions:
+      #        - key: Labels
+      #          operator: In
+      #          values:
+      #          - kubernetes.io/hostname=n0d3-2
+      nodeSelector:
+        kubernetes.io/hostname: n0d3-2
+      containers:
+      - name: mosquitto-container
+        #image: vamsijakkula/hellowhale:latest
+        image: josecarlosjr/mosquitto:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "100m"
+            ephemeral-storage: "100Mi"
+          limits:  
+            memory: "190Mi"
+            cpu: "200m"
+            ephemeral-storage: "250Mi"        
+        ports:
+        - containerPort: 1883
+        - containerPort: 9234
+        volumeMounts:
+          - name: ssl
+            mountPath: /etc/nginx/client/
+      volumes:
+        - name: ssl
+          secret:
+            secretName: client-ca
+---
+apiVersion: v1
+kind: Service 
+metadata:
+  name: mosquitto-svc
+  labels:
+    app: mosquitto
+    service: mosquitto
+spec:
+  selector:
+    app: mosquitto
+  type: ClusterIP
+  #type: NodePort
+  ports:
+  #- nodePort: 31113
+    #port exposta internamente no cluster porta do POD
+  - port: 80
+    #targetPort == servicePort acessado no browser
+    targetPort: 1883 
+    protocol: TCP
+    name: http
+  - port: 9234
+    targetPort: 9234
+    protocol: TCP 
+  selector:
+    app: mosquitto
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: mosquitto-ingress
+  annotations:  
+    nginx.ingress.kubernetes.io/rewrite-target: /  
+    kubernetes.io/ingress.class: nginx
+#    #nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+#    #nginx.ingress.kubernetes.io/ssl-redirect: "true"
+#    #nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  labels:
+    app: mosquitto
+spec:  
+#  tls:
+#  - hosts:
+#      - hello-blue-whale
+#    secretName: client-ca
+  rules:
+  - host: mosquitto
+    http:
+      paths:
+      - path: /
+        #pathType: Prefix
+        backend:
+          serviceName: mosquitto-svc
+          servicePort: 1883
+          servicePort: 9234
