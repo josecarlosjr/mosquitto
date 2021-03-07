@@ -78,7 +78,7 @@ pipeline {
     stage('Deploy App') {
       steps {
         script {
-          kubernetesDeploy(configs: "mosquitto.yml", kubeconfigId: "config", deleteResource: true)
+          //kubernetesDeploy(configs: "mosquitto.yml", kubeconfigId: "config", deleteResource: true)
           kubernetesDeploy(configs: "mosquitto.yml", kubeconfigId: "config")
         }
       }
