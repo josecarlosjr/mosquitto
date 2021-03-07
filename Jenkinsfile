@@ -40,7 +40,7 @@ pipeline {
 
     stage('Checkout Source') {
       steps {
-        git url:'https://github.com/josecarlosjr/mosquitto.git', branch:'master'
+        git url:'https://github.com/josecarlosjr/mosquitto.git', branch:'main'
       }
     }
     
