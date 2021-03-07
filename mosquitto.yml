@@ -53,7 +53,7 @@ spec:
 apiVersion: v1
 kind: Service 
 metadata:
-  name: mosquitto
+  name: mosquitto_exporter
   labels:
     app: mosquitto
     service: mosquitto
@@ -65,7 +65,7 @@ spec:
   ports:
   #- nodePort: 31113
     #port exposta internamente no cluster porta do POD
-  - port: 80
+  - port: 1883
     #targetPort == servicePort acessado no browser
     targetPort: 1883 
     protocol: TCP
@@ -94,12 +94,12 @@ spec:
 #      - hello-blue-whale
 #    secretName: client-ca
   rules:
-  - host: mosquitto
+  - host: mosquitto_exporter
     http:
       paths:
       - path: /
         #pathType: Prefix
         backend:
-          serviceName: mosquitto
+          serviceName: mosquitto_exporter
           servicePort: 1883
           servicePort: 9234
