@@ -53,7 +53,7 @@ spec:
 apiVersion: v1
 kind: Service 
 metadata:
-  name: mosquitto-svc
+  name: mosquitto
   labels:
     app: mosquitto
     service: mosquitto
@@ -100,6 +100,6 @@ spec:
       - path: /
         #pathType: Prefix
         backend:
-          serviceName: mosquitto-svc
+          serviceName: mosquitto
           servicePort: 1883
           servicePort: 9234
