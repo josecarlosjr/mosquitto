@@ -53,7 +53,7 @@ spec:
 apiVersion: v1
 kind: Service 
 metadata:
-  name: mosquitto_exporter
+  name: mosquitto
   labels:
     app: mosquitto
     service: mosquitto
@@ -94,12 +94,12 @@ spec:
 #      - hello-blue-whale
 #    secretName: client-ca
   rules:
-  - host: mosquitto_exporter
+  - host: mosquitto
     http:
       paths:
       - path: /
         #pathType: Prefix
         backend:
-          serviceName: mosquitto_exporter
+          serviceName: mosquitto
           servicePort: 1883
           servicePort: 9234
